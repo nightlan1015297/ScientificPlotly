@@ -42,7 +42,7 @@ def apply_science_style(fig, style_name, palette='science', grid=False, legend_p
     if style_name == 'science':
         # General layout updates
         fig.update_layout(
-            font=dict(family="Times New Roman", size=10),
+            font=dict(family="Times New Roman", size=16),
             colorway=color_palette,
             plot_bgcolor='white',
             legend=dict(
@@ -62,8 +62,7 @@ def apply_science_style(fig, style_name, palette='science', grid=False, legend_p
                 trace.line.width = 2.5
 
         # Axis updates
-        fig.update_xaxes(
-            title=xaxis_title,
+        axis_style = dict(
             mirror='ticks',
             ticks='inside',
             showline=True,
@@ -76,43 +75,23 @@ def apply_science_style(fig, style_name, palette='science', grid=False, legend_p
             tickwidth=2.0,
             showgrid=grid,
             gridwidth=1,
-            gridcolor='grey',
+            gridcolor='darkgrey',
             griddash='dash',
-            zeroline=True,
-            zerolinewidth=1,
-            zerolinecolor='grey'
+            zeroline=grid,
+            zerolinecolor='darkgrey'
         )
-        fig.update_yaxes(
-            title=yaxis_title,
-            mirror='ticks',
-            ticks='inside',
-            showline=True,
-            linecolor='black',
-            linewidth=2.0,
-            minor=dict(ticks="inside", ticklen=4),
-            tickfont=dict(size=22),
-            title_font=dict(size=22, color='black'),
-            ticklen=8,
-            tickwidth=2.0,
-            showgrid=grid,
-            gridwidth=1,
-            gridcolor='grey',
-            griddash='dash',
-            zeroline=True,
-            zerolinewidth=1,
-            zerolinecolor='grey'
-        )
+        fig.update_xaxes(title=xaxis_title, **axis_style)
+        fig.update_yaxes(title=yaxis_title, **axis_style)
+
     elif style_name == 'ieee':
         # Apply the base 'science' style first
         apply_science_style(fig, 'science', palette=palette, grid=grid, legend_pos=legend_pos, xaxis_title=xaxis_title, yaxis_title=yaxis_title)
 
         # IEEE specific overrides
         line_styles = ['solid', 'dash', 'dot', 'dashdot']
-        colors = ['black', 'red', 'blue', 'green']
 
         for i, trace in enumerate(fig.data):
             trace.line.dash = line_styles[i % len(line_styles)]
-            trace.line.color = colors[i % len(colors)]
 
     elif style_name == 'nature':
         # Apply the base 'science' style first
@@ -143,12 +122,12 @@ if __name__ == '__main__':
     fig_ieee.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='Trace 2'))
     fig_ieee.add_trace(go.Scatter(x=x, y=y3, mode='lines', name='Trace 3'))
     fig_ieee.add_trace(go.Scatter(x=x, y=y4, mode='lines', name='Trace 4'))
-    apply_science_style(fig_ieee, 'ieee', legend_pos='top_left', xaxis_title="Frequency (Hz)", yaxis_title="Power Spectral Density ($\mu V^2/Hz$)")
+    apply_science_style(fig_ieee, 'ieee', palette='bright', grid=True, legend_pos='top_left', xaxis_title="Frequency (Hz)", yaxis_title="Power Spectral Density ($\mu V^2/Hz$)")
     fig_ieee.write_image("ieee.png")
 
     # --- Nature Plot ---
     fig_nature = go.Figure()
     fig_nature.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='sin(x)'))
     fig_nature.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='cos(x)'))
-    apply_science_style(fig_nature, 'nature', legend_pos='bottom_center', xaxis_title="Time (s)", yaxis_title="Amplitude ($\\mathring{A}$)")
+    apply_science_style(fig_nature, 'nature', palette='muted', grid=True, legend_pos='bottom_center', xaxis_title="Time (s)", yaxis_title="Amplitude ($\\mathring{A}$)")
     fig_nature.write_image("nature.png")

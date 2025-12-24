@@ -70,3 +70,7 @@ You can enable a grid on your plot using the `grid` argument:
 ```python
 apply_science_style(fig, 'science', grid=True)
 ```
+
+## Citation
+
+This package was created by Yu-Sheng, Li.
