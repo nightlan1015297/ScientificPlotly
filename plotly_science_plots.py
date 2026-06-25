@@ -111,8 +111,8 @@ def apply_science_style(fig, style_name, palette='science', grid=False, legend_p
             margin=dict(l=40, r=20, t=20, b=40)
         )
         # Update grids to match typical APS style (lighter dashed grid)
-        fig.update_xaxes(gridcolor='lightgrey', zerolinecolor='lightgrey')
-        fig.update_yaxes(gridcolor='lightgrey', zerolinecolor='lightgrey')
+        fig.update_xaxes(gridcolor='lightgrey', zerolinecolor='lightgrey', title_standoff=5)
+        fig.update_yaxes(gridcolor='lightgrey', zerolinecolor='lightgrey', title_standoff=5)
 
 
 if __name__ == '__main__':
