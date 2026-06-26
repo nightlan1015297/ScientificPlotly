@@ -185,3 +185,15 @@ if __name__ == '__main__':
     )
 
     fig_aps.write_image("aps.png")
+
+    # --- Bar Chart Plot ---
+    fig_bar = go.Figure()
+    categories = ['Category A', 'Category B', 'Category C', 'Category D']
+    values1 = [4, 7, 3, 8]
+    values2 = [6, 2, 5, 4]
+
+    fig_bar.add_trace(go.Bar(x=categories, y=values1, name='Group 1'))
+    fig_bar.add_trace(go.Bar(x=categories, y=values2, name='Group 2'))
+
+    apply_science_style(fig_bar, 'science', palette='vibrant', grid=True, legend_pos='top_right', xaxis_title="Categories", yaxis_title="Values")
+    fig_bar.write_image("bar.png")
