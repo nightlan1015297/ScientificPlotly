@@ -8,13 +8,15 @@ While Matplotlib is excellent for static plots, Plotly offers the significant ad
 
 ## Installation
 
-To use this package, you need to have Plotly and NumPy installed. You can install them using pip:
+You can install this package directly into your environment using pip.
+
+If you have downloaded or cloned the repository, navigate to the root directory and run:
 
 ```bash
-pip install plotly numpy
+pip install .
 ```
 
-Then, download the `plotly_science_plots.py` file and place it in your project directory.
+This will automatically install the package and its dependencies (`plotly` and `numpy`). You can then import `plotly_science_plots` from anywhere in your installed environment.
 
 ## Usage
 
