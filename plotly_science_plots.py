@@ -100,6 +100,20 @@ def apply_science_style(fig, style_name, palette='science', grid=False, legend_p
         # Nature specific overrides
         fig.update_layout(font=dict(family="Arial"))
 
+    elif style_name == 'aps':
+        # Apply the base 'science' style first
+        apply_science_style(fig, 'science', palette=palette, grid=grid, legend_pos=legend_pos, xaxis_title=xaxis_title, yaxis_title=yaxis_title)
+
+        # APS specific overrides
+        fig.update_layout(
+            font=dict(family="Times New Roman", color="black"),
+            legend=dict(title_text='', bordercolor='lightgrey'),
+            margin=dict(l=40, r=20, t=20, b=40)
+        )
+        # Update grids to match typical APS style (lighter dashed grid)
+        fig.update_xaxes(gridcolor='lightgrey', zerolinecolor='lightgrey', title_standoff=5)
+        fig.update_yaxes(gridcolor='lightgrey', zerolinecolor='lightgrey', title_standoff=5)
+
 
 if __name__ == '__main__':
     # Create a dummy figure
@@ -111,9 +125,9 @@ if __name__ == '__main__':
 
     # --- Science Plot ---
     fig_science = go.Figure()
-    fig_science.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='$\sin(x)$'))
-    fig_science.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='$\cos(x)$'))
-    apply_science_style(fig_science, 'science', palette='bright', grid=True, legend_pos='bottom_right', xaxis_title="X-axis Title (units)", yaxis_title="Y-axis Title ($\int_0^x \sin(t) dt$)")
+    fig_science.add_trace(go.Scatter(x=x, y=y1, mode='lines', name=r'$\sin(x)$'))
+    fig_science.add_trace(go.Scatter(x=x, y=y2, mode='lines', name=r'$\cos(x)$'))
+    apply_science_style(fig_science, 'science', palette='bright', grid=True, legend_pos='bottom_right', xaxis_title="X-axis Title (units)", yaxis_title=r"Y-axis Title ($\int_0^x \sin(t) dt$)")
     fig_science.write_image("science.png")
 
     # --- IEEE Plot ---
@@ -122,12 +136,52 @@ if __name__ == '__main__':
     fig_ieee.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='Trace 2'))
     fig_ieee.add_trace(go.Scatter(x=x, y=y3, mode='lines', name='Trace 3'))
     fig_ieee.add_trace(go.Scatter(x=x, y=y4, mode='lines', name='Trace 4'))
-    apply_science_style(fig_ieee, 'ieee', palette='bright', grid=True, legend_pos='top_left', xaxis_title="Frequency (Hz)", yaxis_title="Power Spectral Density ($\mu V^2/Hz$)")
+    apply_science_style(fig_ieee, 'ieee', palette='bright', grid=True, legend_pos='top_left', xaxis_title="Frequency (Hz)", yaxis_title=r"Power Spectral Density ($\mu V^2/Hz$)")
     fig_ieee.write_image("ieee.png")
 
     # --- Nature Plot ---
     fig_nature = go.Figure()
     fig_nature.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='sin(x)'))
     fig_nature.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='cos(x)'))
-    apply_science_style(fig_nature, 'nature', palette='muted', grid=True, legend_pos='bottom_center', xaxis_title="Time (s)", yaxis_title="Amplitude ($\\mathring{A}$)")
+    apply_science_style(fig_nature, 'nature', palette='muted', grid=True, legend_pos='bottom_center', xaxis_title="Time (s)", yaxis_title=r"Amplitude ($\mathring{A}$)")
     fig_nature.write_image("nature.png")
+
+    # --- APS Plot ---
+    np.random.seed(42)
+    x_data = np.random.normal(0, 1, 10000)
+    x_pdf = np.linspace(-4, 4, 100)
+    y_pdf = (1 / np.sqrt(2 * np.pi)) * np.exp(-0.5 * x_pdf**2)
+
+    fig_aps = go.Figure()
+
+    # Plot histogram
+    fig_aps.add_trace(go.Histogram(
+        x=x_data,
+        histnorm='probability density',
+        name='Data',
+        showlegend=False,
+        marker_color='#7baaf7', # light blue to match image
+        marker_line=dict(width=1, color='black'),
+        opacity=0.8,
+        xbins=dict(start=-4, end=4, size=0.2)
+    ))
+
+    # Plot theoretical PDF
+    fig_aps.add_trace(go.Scatter(
+        x=x_pdf,
+        y=y_pdf,
+        mode='lines',
+        name='Theoretical PDF',
+        line=dict(color='darkred', width=3)
+    ))
+
+    apply_science_style(
+        fig_aps,
+        style_name='aps',
+        grid=True,
+        legend_pos='top_left',
+        xaxis_title=r"Position $x$ (units)",
+        yaxis_title=r"Probability Density $P(x)$"
+    )
+
+    fig_aps.write_image("aps.png")
